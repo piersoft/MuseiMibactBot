@@ -66,7 +66,12 @@ function start($telegram,$update)
 
 			 $log=$today. ";wrong command sent;" .$chat_id. "\n";
 			 //$this->create_keyboard($telegram,$chat_id);
-		 }
+			 $reply = "http://dbunico20.beniculturali.it/DBUnicoMedia/repository/images/13-05-2012/med/6f3c83204c9563bd546c22c39b5e915193f73cc5.jpg";
+			 $content = array('chat_id' => $chat_id, 'text' => $reply);
+
+			 $telegram->sendMessage($content);
+
+	}
 
 
 }
@@ -102,14 +107,14 @@ function location_manager($telegram,$user_id,$chat_id,$location)
 					$comune .=$parsed_json->{'address'}->{'town'};
 				}else 	$comune .=$parsed_json->{'address'}->{'city'};
 
-if ($parsed_json->{'address'}->{'village'}) $comune .=$parsed_json->{'address'}->{'village'};
+				if ($parsed_json->{'address'}->{'village'}) $comune .=$parsed_json->{'address'}->{'village'};
 				$location="Comune di: ".$comune." tramite le tue coordinate: ".$lat.",".$lon;
 				$content = array('chat_id' => $chat_id, 'text' => $location,'disable_web_page_preview'=>true);
 				$telegram->sendMessage($content);
 
 			  $alert="";
 				echo $comune;
-					$html = file_get_contents('http://151.12.58.144:8080/DBUnicoManagerWeb/dbunicomanager/searchPlace?tipologiaLuogo=1&quantita=20&comune='.$comune);
+					$html = file_get_contents('http://dbunico20.beniculturali.it/DBUnicoManagerWeb/dbunicomanager/searchPlace?tipologiaLuogo=1&quantita=20&comune='.$comune);
 					//echo $html;
 					//$html = iconv('ASCII', 'UTF-8//IGNORE', $html);
 			//		$html=utf8_decode($html);
@@ -142,6 +147,8 @@ if ($parsed_json->{'address'}->{'village'}) $comune .=$parsed_json->{'address'}-
 				$divs8   = $xpa->query('//info/chiusuraSettimanale/testostandard');
 				$divs9   = $xpa->query('//latitudine');
 				$divs10   = $xpa->query('//longitudine');
+				$divs11   = $xpa->query('//indirizzo/via-piazza');
+				$divs12   = $xpa->query('//allegati/file/url');
 				$diva=[];
 				$diva1=[];
 				$diva2=[];
@@ -153,6 +160,8 @@ if ($parsed_json->{'address'}->{'village'}) $comune .=$parsed_json->{'address'}-
 				$diva8=[];
 				$diva9=[];
 				$diva10=[];
+				$diva11=[];
+				$diva12=[];
 				$count=0;
 				foreach($divs0 as $div0) {
 					$count++;
@@ -205,6 +214,14 @@ if ($parsed_json->{'address'}->{'village'}) $comune .=$parsed_json->{'address'}-
 
 								array_push($diva10,$div10->nodeValue);
 					}
+					foreach($divs11 as $div11) {
+
+								array_push($diva11,$div11->nodeValue);
+					}
+					foreach($divs12 as $div12) {
+
+								array_push($diva12,$div12->nodeValue);
+					}
 
 			  //$count=3;
 
@@ -218,8 +235,10 @@ if ($parsed_json->{'address'}->{'village'}) $comune .=$parsed_json->{'address'}-
 				if ($diva5[$i]!=NULL)$alert.= "\nSitoweb: ".$diva5[$i];
 				if ($diva6[$i]!=NULL) $alert.= "\nEmail: ".$diva6[$i];
 				if ($diva7[$i]!=NULL)$alert.= "\nTelefono: ".$diva7[$i];
+				if ($diva11[$i]!=NULL)$alert.= "\nIndirizzo: ".$diva11[$i];
 				if ($diva8[$i]!=NULL)$alert.= "\nChiusura settimanale: ".$diva8[$i];
-		  	if ($diva9[$i]!=NULL){
+
+				if ($diva9[$i]!=NULL){
 
 				$longUrl = "http://www.openstreetmap.org/?mlat=".$diva9[$i]."&mlon=".$diva10[$i]."#map=19/".$diva9[$i]."/".$diva10[$i];
 
@@ -249,14 +268,18 @@ if ($parsed_json->{'address'}->{'village'}) $comune .=$parsed_json->{'address'}-
 				}
 
 				$alert .= "\n";
+				if ($diva12[$i]!=NULL) {
+					$content = array('chat_id' => $chat_id, 'text' => $diva12[$i]);
+					$telegram->sendMessage($content);
+				}
 			}
 		//	$this->create_keyboard($telegram,$chat_id);
-		echo $alert;
+				echo $alert;
 				$chunks = str_split($alert, self::MAX_LENGTH);
 				foreach($chunks as $chunk) {
 					$forcehide=$telegram->buildForceReply(true);
 						//chiedo cosa sta accadendo nel luogo
-					$content = array('chat_id' => $chat_id, 'text' => $chunk, 'reply_markup' =>$forcehide,'disable_web_page_preview'=>true);
+					$content = array('chat_id' => $chat_id, 'text' => $chunk, 'reply_markup' =>$forcehide);
 					$telegram->sendMessage($content);
 
 				}
