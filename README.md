@@ -20,5 +20,3 @@ To use the application use "start.php getupdates" for manual execution. "start.p
 
 Good Luck!
 
-
-ps: Nel codice è presente la visualizzazione su mappa openstreetmap delle coordinate che il DBUnico incorpora nei tags, ma è commentato. In attesa di chiarimento da parte dei Mibact, perchè sembra che tali coordinate provengono da Google e quindi non possono dichiararsi in licenza opendata, a differenza dei contenuti del DB
