@@ -244,7 +244,7 @@ function location_manager($telegram,$user_id,$chat_id,$location)
 				if ($diva11[$i]!=NULL)$alert.= "\nIndirizzo: ".$diva11[$i];
 				if ($diva13[$i]!=NULL)$alert.= "\nApertura: ".$diva13[$i];
 				if ($diva8[$i]!=NULL) $alert.= "\nChiusura settimanale: ".$diva8[$i];
-
+/*
 				if ($diva9[$i]!=NULL){
 
 				$longUrl = "http://www.openstreetmap.org/?mlat=".$diva9[$i]."&mlon=".$diva10[$i]."#map=19/".$diva9[$i]."/".$diva10[$i];
@@ -273,7 +273,7 @@ function location_manager($telegram,$user_id,$chat_id,$location)
 				$shortLink = get_object_vars($json);
 				$alert .="\nMappa: ".$shortLink['id'];
 				}
-
+*/
 			//	$alert .= "\n\n";
 				if ($diva12[$i]!=NULL) {
 
