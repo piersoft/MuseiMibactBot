@@ -94,10 +94,6 @@ function location_manager($telegram,$user_id,$chat_id,$location)
 			$lon=$location["longitude"];
 			$lat=$location["latitude"];
 
-			$response=$telegram->getData();
-
-
-
 				$reply="http://nominatim.openstreetmap.org/reverse?email=piersoft2@gmail.com&format=json&lat=".$lat."&lon=".$lon."&zoom=18&addressdetails=1";
 				$json_string = file_get_contents($reply);
 				$parsed_json = json_decode($json_string);
@@ -112,37 +108,35 @@ function location_manager($telegram,$user_id,$chat_id,$location)
 
 			  $alert="";
 				echo $comune;
-					$html = file_get_contents('http://151.12.58.144:8080/DBUnicoManagerWeb/dbunicomanager/searchPlace?tipologiaLuogo=1&comune='.$comune);
+					$html = file_get_contents('http://151.12.58.144:8080/DBUnicoManagerWeb/dbunicomanager/searchPlace?tipologiaLuogo=1&limit=20&comune='.$comune);
 					//echo $html;
 					//$html = iconv('ASCII', 'UTF-8//IGNORE', $html);
 			//		$html=utf8_decode($html);
-			  	$html=str_replace("<![CDATA[","",$html);
-			  	$html=str_replace("]]>","",$html);
-  	$html=str_replace("</br>","",$html);
-		$html=str_replace("\n","",$html);
-		$html=str_replace("&nbsp;","",$html);
-$html=str_replace(";"," ",$html);
-$html=str_replace(","," ",$html);
+		  	$html=str_replace("<![CDATA[","",$html);
+		  	$html=str_replace("]]>","",$html);
+  			$html=str_replace("</br>","",$html);
+				$html=str_replace("\n","",$html);
+				$html=str_replace("&nbsp;","",$html);
+				$html=str_replace(";"," ",$html);
+	 			$html=str_replace(","," ",$html);
 
+				$doc = new DOMDocument;
+				$doc->loadHTML($html);
 
-
-					$doc = new DOMDocument;
-					$doc->loadHTML($html);
-
-					$xpa    = new DOMXPath($doc);
+				$xpa    = new DOMXPath($doc);
 					//var_dump($doc);
-					$divs0   = $xpa->query('//mibac');
-					$divs   = $xpa->query('//mibac//luogodellacultura/proprieta');
-					$divs1   = $xpa->query('//mibac//luogodellacultura/denominazione/nomestandard');
-					$divs2   = $xpa->query('//mibac//luogodellacultura/descrizione/testostandard');
-					$divs3   = $xpa->query('//mibac//luogodellacultura/descrizione/traduzioni');
-					$divs4   = $xpa->query('//mibac//luogodellacultura/orario/testostandard');
-					$divs5   = $xpa->query('//info/sitoweb');
-					$divs6   = $xpa->query('//info/email');
-					$divs7   = $xpa->query('//info/telefono/testostandard');
-					$divs8   = $xpa->query('//info/chiusuraSettimanale/testostandard');
-					$divs9   = $xpa->query('//latitudine');
-					$divs10   = $xpa->query('//longitudine');
+				$divs0   = $xpa->query('//mibac');
+				$divs   = $xpa->query('//mibac//luogodellacultura/proprieta');
+				$divs1   = $xpa->query('//mibac//luogodellacultura/denominazione/nomestandard');
+				$divs2   = $xpa->query('//mibac//luogodellacultura/descrizione/testostandard');
+				$divs3   = $xpa->query('//mibac//luogodellacultura/descrizione/traduzioni');
+				$divs4   = $xpa->query('//mibac//luogodellacultura/orario/testostandard');
+				$divs5   = $xpa->query('//info/sitoweb');
+				$divs6   = $xpa->query('//info/email');
+				$divs7   = $xpa->query('//info/telefono/testostandard');
+				$divs8   = $xpa->query('//info/chiusuraSettimanale/testostandard');
+				$divs9   = $xpa->query('//latitudine');
+				$divs10   = $xpa->query('//longitudine');
 				$diva=[];
 				$diva1=[];
 				$diva2=[];
