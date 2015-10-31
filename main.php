@@ -108,7 +108,7 @@ function location_manager($telegram,$user_id,$chat_id,$location)
 				}else 	$comune .=$parsed_json->{'address'}->{'city'};
 
 				if ($parsed_json->{'address'}->{'village'}) $comune .=$parsed_json->{'address'}->{'village'};
-				$location="Comune di: ".$comune." tramite le tue coordinate: ".$lat.",".$lon;
+				$location="Comune di: ".$comune." tramite le coordinate che hai inviato: ".$lat.",".$lon;
 				$content = array('chat_id' => $chat_id, 'text' => $location,'disable_web_page_preview'=>true);
 				$telegram->sendMessage($content);
 
@@ -126,7 +126,7 @@ function location_manager($telegram,$user_id,$chat_id,$location)
 				$html=str_replace(";"," ",$html);
 	 			$html=str_replace(","," ",$html);
 				if (strpos($html,'<mibac>') == false) {
-					$content = array('chat_id' => $chat_id, 'text' => "Non ci risultano Musei in questo luogo",'disable_web_page_preview'=>true);
+					$content = array('chat_id' => $chat_id, 'text' => "Non ci risultano Musei censiti Mibact in questo luogo",'disable_web_page_preview'=>true);
 						$telegram->sendMessage($content);
 				}
 
@@ -300,13 +300,13 @@ function location_manager($telegram,$user_id,$chat_id,$location)
 
 					curl_close($curlObj);
 					$shortLink = get_object_vars($json);
-					$alert .="\nFoto/Video: ".$shortLink['id']."\n\n";
+					$alert .="\nFoto/Video: ".$shortLink['id'];
 				//	$alert .="Foto: ".$diva12[$i]."\n\n";
 			//		$content = array('chat_id' => $chat_id, 'text' => $diva12[$i]);
 			//		$telegram->sendMessage($content);
 				}
 
-					$alert.="__________________";
+					$alert.="\n\n__________________";
 
 
 
