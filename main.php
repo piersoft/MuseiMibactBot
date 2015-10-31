@@ -3,7 +3,7 @@
 * Telegram Bot example for Italian Museums of DBUnico Mibact Lic. CC-BY
 * @author Francesco Piero Paolicelli @piersoft
 */
-
+include("settings_t.php");
 include("Telegram.php");
 include("QueryLocation.php");
 
@@ -218,7 +218,7 @@ function location_manager($telegram,$user_id,$chat_id,$location)
 
 				$longUrl = "http://www.openstreetmap.org/?mlat=".$diva9[$i]."&mlon=".$diva10[$i]."#map=19/".$diva9[$i]."/".$diva10[$i];
 
-				$apiKey = 'AIzaSyBUMmMuuo4WkImc3IHrch3yMLHu5DeFtPA';
+				$apiKey = API;
 
 				$postData = array('longUrl' => $longUrl, 'key' => $apiKey);
 				$jsonData = json_encode($postData);
