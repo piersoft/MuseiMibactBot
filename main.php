@@ -5,7 +5,6 @@
 */
 include("settings_t.php");
 include("Telegram.php");
-include("QueryLocation.php");
 
 class mainloop{
 const MAX_LENGTH = 4096;
