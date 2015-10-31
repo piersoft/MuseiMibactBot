@@ -300,13 +300,13 @@ function location_manager($telegram,$user_id,$chat_id,$location)
 
 					curl_close($curlObj);
 					$shortLink = get_object_vars($json);
-					$alert .="\nFoto: ".$shortLink['id']."\n\n";
+					$alert .="\nFoto/Video: ".$shortLink['id']."\n\n";
 				//	$alert .="Foto: ".$diva12[$i]."\n\n";
 			//		$content = array('chat_id' => $chat_id, 'text' => $diva12[$i]);
 			//		$telegram->sendMessage($content);
 				}
 
-					$alert.="_______________________";
+					$alert.="__________________";
 
 
 
