@@ -3,7 +3,7 @@
 * Telegram Bot example for Italian Museums of DBUnico Mibact Lic. CC-BY
 * @author Francesco Piero Paolicelli @piersoft
 */
-include("settings_t.php");
+//include("settings_t.php");
 include("Telegram.php");
 
 class mainloop{
@@ -44,11 +44,8 @@ function start($telegram,$update)
 		$reply = "Benvenuto. Per ricercare un museo, clicca sulla graffetta (📎) e poi 'posizione'. Verrà interrogato il DataBase Unico del Mibact utilizzabile con licenza CC-BY e verranno elencati fino a max 20 musei. In qualsiasi momento scrivendo /start ti ripeterò questo messaggio di benvenuto.\nQuesto bot, non ufficiale, è stato realizzato da @piersoft e il codice sorgente per libero riuso si trova su https://github.com/piersoft/MuseiMibactBot. La propria posizione viene ricercata grazie al geocoder di openStreetMap con Lic. odbl";
 		$content = array('chat_id' => $chat_id, 'text' => $reply,'disable_web_page_preview'=>true);
 		$telegram->sendMessage($content);
-
-		$forcehide=$telegram->buildKeyBoardHide(true);
-		$content = array('chat_id' => $chat_id, 'text' => "", 'reply_markup' =>$forcehide, 'reply_to_message_id' =>$bot_request_message_id);
-		$bot_request_message=$telegram->sendMessage($content);
 		$log=$today. ";new chat started;" .$chat_id. "\n";
+
 		}
 
 		//gestione segnalazioni georiferite
@@ -92,7 +89,7 @@ function location_manager($telegram,$user_id,$chat_id,$location)
 
 			$lon=$location["longitude"];
 			$lat=$location["latitude"];
-
+			$response=$telegram->getData();
 				$reply="http://nominatim.openstreetmap.org/reverse?email=piersoft2@gmail.com&format=json&lat=".$lat."&lon=".$lon."&zoom=18&addressdetails=1";
 				$json_string = file_get_contents($reply);
 				$parsed_json = json_decode($json_string);
@@ -104,6 +101,11 @@ function location_manager($telegram,$user_id,$chat_id,$location)
 					$temp_c1 .="\nCittà: ".$parsed_json->{'address'}->{'town'};
 					$comune .=$parsed_json->{'address'}->{'town'};
 				}else 	$comune .=$parsed_json->{'address'}->{'city'};
+
+if ($parsed_json->{'address'}->{'village'}) $comune .=$parsed_json->{'address'}->{'village'};
+				$location="Comune di: ".$comune." tramite le tue coordinate: ".$lat.",".$lon;
+				$content = array('chat_id' => $chat_id, 'text' => $location,'disable_web_page_preview'=>true);
+				$telegram->sendMessage($content);
 
 			  $alert="";
 				echo $comune;
@@ -118,6 +120,10 @@ function location_manager($telegram,$user_id,$chat_id,$location)
 				$html=str_replace("&nbsp;","",$html);
 				$html=str_replace(";"," ",$html);
 	 			$html=str_replace(","," ",$html);
+				if (strpos($html,'<mibac>') == false) {
+					$content = array('chat_id' => $chat_id, 'text' => "Non ci risultano Musei in questo luogo",'disable_web_page_preview'=>true);
+						$telegram->sendMessage($content);
+				}
 
 				$doc = new DOMDocument;
 				$doc->loadHTML($html);
@@ -245,15 +251,16 @@ function location_manager($telegram,$user_id,$chat_id,$location)
 				$alert .= "\n";
 			}
 		//	$this->create_keyboard($telegram,$chat_id);
+		echo $alert;
 				$chunks = str_split($alert, self::MAX_LENGTH);
 				foreach($chunks as $chunk) {
 					$forcehide=$telegram->buildForceReply(true);
 						//chiedo cosa sta accadendo nel luogo
-						$content = array('chat_id' => $chat_id, 'text' => $chunk, 'reply_markup' =>$forcehide,'disable_web_page_preview'=>true);
-						$telegram->sendMessage($content);
+					$content = array('chat_id' => $chat_id, 'text' => $chunk, 'reply_markup' =>$forcehide,'disable_web_page_preview'=>true);
+					$telegram->sendMessage($content);
 
 				}
-	$this->create_keyboard($telegram,$chat_id);
+			//	$this->create_keyboard($telegram,$chat_id);
 	}
 
 
