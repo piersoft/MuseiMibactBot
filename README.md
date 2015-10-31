@@ -1,8 +1,11 @@
 
 Use:
-Send your position. DBUnico of Mibact will send you Museum into your location.
+Send your position. DBUnico of Mibact will send you Museum into your location with Lic. CC-BY
+
+Lic. MIT @piersoft
 
 
+Config:
 In localhost is possible to launch
 php start.php 'sethook' to set start.php as webhook
 php start.php 'removehook' to remove start.php as webhook
