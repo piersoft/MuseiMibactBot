@@ -42,7 +42,7 @@ function start($telegram,$update)
 	$today = date("Y-m-d H:i:s");
 
 	if ($text == "/start") {
-		$reply = "Benvenuto. Per ricercare un museo, clicca sulla graffetta (📎) e poi 'posizione'. Verrà interrogato il DataBase Unico del Mibact utilizzabile con licenza CC-BY. In qualsiasi momento scrivendo /start ti ripeterò questo messaggio di benvenuto.\nQuesto bot, non ufficiale, è stato realizzato da @piersoft e il codice sorgente per libero riuso si trova su https://github.com/piersoft/MuseiMibactBot.\nInvia la tua posizione cliccando sulla graffetta (📎) in basso e, se vuoi, puoi cliccare due volte sulla mappa e spostare il Pin Rosso in un luogo specifico";
+		$reply = "Benvenuto. Per ricercare un museo, clicca sulla graffetta (📎) e poi 'posizione'. Verrà interrogato il DataBase Unico del Mibact utilizzabile con licenza CC-BY. In qualsiasi momento scrivendo /start ti ripeterò questo messaggio di benvenuto.\nQuesto bot, non ufficiale, è stato realizzato da @piersoft e il codice sorgente per libero riuso si trova su https://github.com/piersoft/MuseiMibactBot.";
 		$content = array('chat_id' => $chat_id, 'text' => $reply);
 		$telegram->sendMessage($content);
 
