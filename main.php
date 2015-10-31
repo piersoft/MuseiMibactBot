@@ -60,7 +60,7 @@ function start($telegram,$update)
 
 		else{
 
-			 $reply = "Hai selezionato un comando non previsto. Ricordati che devi prima inviare la tua posizione";
+			 $reply = "Hai selezionato un comando non previsto. Ricordati che devi prima inviare la tua posizione cliccando sulla graffetta (📎) ";
 			 $content = array('chat_id' => $chat_id, 'text' => $reply);
 			 $telegram->sendMessage($content);
 
