@@ -41,7 +41,7 @@ function start($telegram,$update)
 	$today = date("Y-m-d H:i:s");
 
 	if ($text == "/start") {
-		$reply = "Benvenuto. Per ricercare un museo, clicca sulla graffetta (📎) e poi 'posizione'. Verrà interrogato il DataBase Unico del Mibact utilizzabile con licenza CC-BY e verranno elencati fino a max 20 musei. In qualsiasi momento scrivendo /start ti ripeterò questo messaggio di benvenuto.\nQuesto bot, non ufficiale, è stato realizzato da @piersoft e il codice sorgente per libero riuso si trova su https://github.com/piersoft/MuseiMibactBot. La propria posizione viene ricercata grazie al geocoder di openStreetMap con Lic. odbl";
+		$reply = "Benvenuto. Per ricercare un museo, clicca sulla graffetta (📎) e poi 'posizione'. Verrà interrogato il DataBase Unico del Mibact utilizzabile con licenza CC-BY e verranno elencati fino a max 20 musei. In qualsiasi momento scrivendo /start ti ripeterò questo messaggio di benvenuto.\nQuesto bot, non ufficiale, è stato realizzato da @piersoft e il codice sorgente per libero riuso si trova su https://github.com/piersoft/MuseiMibactBot. La propria posizione viene ricercata grazie al geocoder di openStreetMap con Lic. odbl\nPS: Nel codice è presente la visualizzazione su mappa openstreetmap delle coordinate che il DBUnico incorpora nei tags, ma è commentato e quindi non attivo. In attesa di chiarimento da parte dei Mibact, perchè sembra che tali coordinate provengono da Google e quindi non possono dichiararsi in licenza opendata, a differenza dei contenuti del DB";
 		$content = array('chat_id' => $chat_id, 'text' => $reply,'disable_web_page_preview'=>true);
 		$telegram->sendMessage($content);
 		$log=$today. ";new chat started;" .$chat_id. "\n";
@@ -237,7 +237,7 @@ function location_manager($telegram,$user_id,$chat_id,$location)
 				if ($diva7[$i]!=NULL)$alert.= "\nTelefono: ".$diva7[$i];
 				if ($diva11[$i]!=NULL)$alert.= "\nIndirizzo: ".$diva11[$i];
 				if ($diva8[$i]!=NULL)$alert.= "\nChiusura settimanale: ".$diva8[$i];
-
+/*
 				if ($diva9[$i]!=NULL){
 
 				$longUrl = "http://www.openstreetmap.org/?mlat=".$diva9[$i]."&mlon=".$diva10[$i]."#map=19/".$diva9[$i]."/".$diva10[$i];
@@ -266,7 +266,7 @@ function location_manager($telegram,$user_id,$chat_id,$location)
 				$shortLink = get_object_vars($json);
 				$alert .="\nMappa: ".$shortLink['id'];
 				}
-
+*/
 				$alert .= "\n";
 				if ($diva12[$i]!=NULL) {
 					$content = array('chat_id' => $chat_id, 'text' => $diva12[$i]);
