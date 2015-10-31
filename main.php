@@ -267,23 +267,27 @@ function location_manager($telegram,$user_id,$chat_id,$location)
 				$alert .="\nMappa: ".$shortLink['id'];
 				}
 */
-				$alert .= "\n";
+				$alert .= "\n\n";
 				if ($diva12[$i]!=NULL) {
-					$content = array('chat_id' => $chat_id, 'text' => $diva12[$i]);
-					$telegram->sendMessage($content);
+					$alert .="Foto: ".$diva12[$i]."\n\n";
+			//		$content = array('chat_id' => $chat_id, 'text' => $diva12[$i]);
+			//		$telegram->sendMessage($content);
 				}
+
+					$alert.="__________________________________";
+
 			}
-		//	$this->create_keyboard($telegram,$chat_id);
-				echo $alert;
+
+			//	echo $alert;
 				$chunks = str_split($alert, self::MAX_LENGTH);
 				foreach($chunks as $chunk) {
 					$forcehide=$telegram->buildForceReply(true);
 						//chiedo cosa sta accadendo nel luogo
-					$content = array('chat_id' => $chat_id, 'text' => $chunk, 'reply_markup' =>$forcehide);
+					$content = array('chat_id' => $chat_id, 'text' => $chunk, 'reply_markup' =>$forcehide,'disable_web_page_preview'=>true);
 					$telegram->sendMessage($content);
 
 				}
-			//	$this->create_keyboard($telegram,$chat_id);
+
 	}
 
 
