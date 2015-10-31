@@ -42,7 +42,7 @@ function start($telegram,$update)
 	$today = date("Y-m-d H:i:s");
 
 	if ($text == "/start") {
-		$reply = "Benvenuto. Per ricercare un museo, clicca sulla graffetta (📎) e poi 'posizione'. Verrà interrogato il DataBase Unico del Mibact utilizzabile con licenza CC-BY. In qualsiasi momento scrivendo /start ti ripeterò questo messaggio di benvenuto.\nQuesto bot, non ufficiale, è stato realizzato da @piersoft e il codice sorgente per libero riuso si trova su https://github.com/piersoft/MuseiMibactBot. La propria posizione viene ricercata grazie al geocoder di openStreetMap con Lic. odbl";
+		$reply = "Benvenuto. Per ricercare un museo, clicca sulla graffetta (📎) e poi 'posizione'. Verrà interrogato il DataBase Unico del Mibact utilizzabile con licenza CC-BY e verranno elencati fino a max 20 musei. In qualsiasi momento scrivendo /start ti ripeterò questo messaggio di benvenuto.\nQuesto bot, non ufficiale, è stato realizzato da @piersoft e il codice sorgente per libero riuso si trova su https://github.com/piersoft/MuseiMibactBot. La propria posizione viene ricercata grazie al geocoder di openStreetMap con Lic. odbl";
 		$content = array('chat_id' => $chat_id, 'text' => $reply,'disable_web_page_preview'=>true);
 		$telegram->sendMessage($content);
 
@@ -108,7 +108,7 @@ function location_manager($telegram,$user_id,$chat_id,$location)
 
 			  $alert="";
 				echo $comune;
-					$html = file_get_contents('http://151.12.58.144:8080/DBUnicoManagerWeb/dbunicomanager/searchPlace?tipologiaLuogo=1&limit=20&comune='.$comune);
+					$html = file_get_contents('http://151.12.58.144:8080/DBUnicoManagerWeb/dbunicomanager/searchPlace?tipologiaLuogo=1&quantita=20&comune='.$comune);
 					//echo $html;
 					//$html = iconv('ASCII', 'UTF-8//IGNORE', $html);
 			//		$html=utf8_decode($html);
