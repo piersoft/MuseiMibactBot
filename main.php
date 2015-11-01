@@ -66,10 +66,7 @@ function start($telegram,$update)
 
 			 $log=$today. ";wrong command sent;" .$chat_id. "\n";
 			 //$this->create_keyboard($telegram,$chat_id);
-			 $reply = "http://dbunico20.beniculturali.it/DBUnicoMedia/repository/images/13-05-2012/med/6f3c83204c9563bd546c22c39b5e915193f73cc5.jpg";
-			 $content = array('chat_id' => $chat_id, 'text' => $reply);
-
-			 $telegram->sendMessage($content);
+		
 
 	}
 
