@@ -316,9 +316,13 @@ function location_manager($telegram,$user_id,$chat_id,$location)
 
 				$chunks = str_split($alert, self::MAX_LENGTH);
 				foreach($chunks as $chunk) {
-					$forcehide=$telegram->buildForceReply(true);
+		//			$forcehide=$telegram->buildForceReply(true);
 						//chiedo cosa sta accadendo nel luogo
-					$content = array('chat_id' => $chat_id, 'text' => $chunk, 'reply_markup' =>$forcehide,'disable_web_page_preview'=>true);
+			//		$content = array('chat_id' => $chat_id, 'text' => $chunk, 'reply_markup' =>$forcehide,'disable_web_page_preview'=>true);
+			$forcehide=$telegram->buildForceReply(true);
+				//chiedo cosa sta accadendo nel luogo
+			$content = array('chat_id' => $chat_id, 'text' => $chunk,'disable_web_page_preview'=>true);
+
 					$telegram->sendMessage($content);
 
 				}
