@@ -66,7 +66,7 @@ function start($telegram,$update)
 
 			 $log=$today. ";wrong command sent;" .$chat_id. "\n";
 			 //$this->create_keyboard($telegram,$chat_id);
-		
+
 
 	}
 
@@ -132,6 +132,7 @@ function location_manager($telegram,$user_id,$chat_id,$location)
 
 				$xpa    = new DOMXPath($doc);
 					//var_dump($doc);
+				$divsl   = $xpa->query('//codice[@sorgente="DBUnico 2.0"]');
 				$divs0   = $xpa->query('//mibac');
 				$divs   = $xpa->query('//mibac//luogodellacultura/proprieta');
 				$divs1   = $xpa->query('//mibac//luogodellacultura/denominazione/nomestandard');
@@ -147,6 +148,7 @@ function location_manager($telegram,$user_id,$chat_id,$location)
 				$divs11   = $xpa->query('//indirizzo/via-piazza');
 				$divs12   = $xpa->query('//allegati/file/url');
 				$divs13   = $xpa->query('//info/orario/testostandard');
+				$dival=[];
 				$diva=[];
 				$diva1=[];
 				$diva2=[];
@@ -166,6 +168,10 @@ function location_manager($telegram,$user_id,$chat_id,$location)
 					$count++;
 				}
 				echo "Count: ".$count."\n";
+				foreach($divsl as $divl) {
+
+							array_push($dival,$divl->nodeValue);
+				}
 
 					foreach($divs as $div) {
 							array_push($diva,$div->nodeValue);
@@ -241,9 +247,21 @@ function location_manager($telegram,$user_id,$chat_id,$location)
 				if ($diva11[$i]!=NULL)$alert.= "\nIndirizzo: ".$diva11[$i];
 				if ($diva13[$i]!=NULL)$alert.= "\nApertura: ".$diva13[$i];
 				if ($diva8[$i]!=NULL) $alert.= "\nChiusura settimanale: ".$diva8[$i];
-/*
-				if ($diva9[$i]!=NULL){
 
+				if ($diva9[$i]!=NULL){
+					$theta = $lon-$diva10[$i];
+					$dist = sin(deg2rad($lat)) * sin(deg2rad($diva9[$i])) +  cos(deg2rad($lat)) * cos(deg2rad($diva9[$i])) * cos(deg2rad($theta));
+					$dist = acos($dist);
+					$dist = rad2deg($dist);
+					$miles = $dist * 60 * 1.1515 * 1.609344;
+					if ($miles >=1){
+						$alert .="\nDistanza: ".number_format($miles, 2, '.', '')." Km\n";
+					} else $alert .="\nDistanza: ".number_format(($miles*1000), 0, '.', '')." mt\n";
+
+
+				}
+
+/*
 				$longUrl = "http://www.openstreetmap.org/?mlat=".$diva9[$i]."&mlon=".$diva10[$i]."#map=19/".$diva9[$i]."/".$diva10[$i];
 
 				$apiKey = API;
@@ -272,6 +290,37 @@ function location_manager($telegram,$user_id,$chat_id,$location)
 				}
 */
 			//	$alert .= "\n\n";
+				if ($dival[$i]!=NULL) {
+
+					$longUrl = "http://www.beniculturali.it/mibac/opencms/MiBAC/sito-MiBAC/MenuPrincipale/LuoghiDellaCultura/Ricerca/index.html?action=show&idluogo=".$dival[$i];
+
+					$apiKey = API;
+
+					$postData = array('longUrl' => $longUrl, 'key' => $apiKey);
+					$jsonData = json_encode($postData);
+
+					$curlObj = curl_init();
+
+					curl_setopt($curlObj, CURLOPT_URL, 'https://www.googleapis.com/urlshortener/v1/url?key='.$apiKey);
+					curl_setopt($curlObj, CURLOPT_RETURNTRANSFER, 1);
+					curl_setopt($curlObj, CURLOPT_SSL_VERIFYPEER, 0);
+					curl_setopt($curlObj, CURLOPT_HEADER, 0);
+					curl_setopt($curlObj, CURLOPT_HTTPHEADER, array('Content-type:application/json'));
+					curl_setopt($curlObj, CURLOPT_POST, 1);
+					curl_setopt($curlObj, CURLOPT_POSTFIELDS, $jsonData);
+
+					$response = curl_exec($curlObj);
+
+					// Change the response json string to object
+					$json = json_decode($response);
+
+					curl_close($curlObj);
+					$shortLink = get_object_vars($json);
+					$alert .="\nScheda completa: ".$shortLink['id'];
+				//	$alert .="Foto: ".$diva12[$i]."\n\n";
+			//		$content = array('chat_id' => $chat_id, 'text' => $diva12[$i]);
+			//		$telegram->sendMessage($content);
+				}
 				if ($diva12[$i]!=NULL) {
 
 					$longUrl = $diva12[$i];
@@ -302,7 +351,6 @@ function location_manager($telegram,$user_id,$chat_id,$location)
 			//		$content = array('chat_id' => $chat_id, 'text' => $diva12[$i]);
 			//		$telegram->sendMessage($content);
 				}
-
 					$alert.="\n\n__________________";
 
 
