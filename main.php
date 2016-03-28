@@ -173,6 +173,7 @@ $option=[];
 	}elseif(strpos($text,'🏛') !== false){
 		$text=str_replace("🏛 ","",$text);
 		$text=str_replace("🏛","",$text);
+	//	$text=str_replace("/","",$text);
 	//	$text=str_replace("$$",")",$text);
 	//	$text=str_replace("$","(",$text);
 	//	$text=str_replace("___","-",$text);
@@ -421,7 +422,8 @@ if ($count > 50){
 
 		}
 			if ($diva12[0]!=NULL) {
-		$reply=$diva12[0];
+	//	$reply=$diva12[0];
+		$reply=$shortLink['id'];
 		$content = array('chat_id' => $chat_id, 'text' => $reply);
 			$telegram->sendMessage($content);
 		}
