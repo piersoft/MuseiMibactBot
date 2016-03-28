@@ -68,7 +68,8 @@ $reply .="\nWelcome. To search for a Museum, click on the paper clip (📎) and 
 			$location="Sto cercando i Musei del Comune di: / Searching for Town's Museums of: ".$text;
 			$content = array('chat_id' => $chat_id, 'text' => $location,'disable_web_page_preview'=>true);
 			$telegram->sendMessage($content);
-			sleep (1);
+		//	sleep (1);
+			$text=str_replace(" ","%20",$text);
 			$html = file_get_contents('http://dbunico20.beniculturali.it/DBUnicoManagerWeb/dbunicomanager/searchPlace?tipologiaLuogo=1&quantita=50&comune='.$text);
 
 		$html=str_replace("<![CDATA[","",$html);
@@ -514,7 +515,8 @@ function location_manager($telegram,$user_id,$chat_id,$location)
 				$telegram->sendMessage($content);
 
 			  $alert="";
-				echo $comune;
+					$comune=str_replace(" ","%20",$comune);
+		//		echo $comune;
 					$html = file_get_contents('http://dbunico20.beniculturali.it/DBUnicoManagerWeb/dbunicomanager/searchPlace?tipologiaLuogo=1&quantita=50&comune='.$comune);
 					//echo $html;
 					//$html = iconv('ASCII', 'UTF-8//IGNORE', $html);
