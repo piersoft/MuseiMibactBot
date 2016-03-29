@@ -62,7 +62,7 @@ $reply .="\nWelcome. To search for a Museum, click on the paper clip (📎) and 
 		}
 //elseif($text !=null)
 
-		elseif(strpos($text,'🏛') === false){
+		elseif(strpos($text,'🏛') === false && strpos($text,'/') === false && strpos($text,'-') === false){
 
 
 			$location="Sto cercando i Musei del Comune di: / Searching for Town's Museums of: ".$text;
@@ -129,9 +129,9 @@ $option=[];
 		for ($i=0;$i<$count;$i++){
 		$alert.="\n\n";
 		$alert.= $diva1[$i]."\n";
-		$alert .="🏛 ".$dival[$i]."\n";
+	//	$alert .="🏛 ".$dival[$i]."\n";
 		$option[$i]=$dival[$i];
-	//	$alert.= "Clicca per dettagli: /".$diva1[$i]."\n";
+		$alert.= "🏛 /".$dival[$i]."-".$diva1[$i]."\n";
 		$alert.="__________________";
 	}
 
@@ -150,7 +150,7 @@ $option=[];
 		}
 		$optionf=array([]);
 		for ($i=0;$i<$count;$i++){
-			array_push($optionf,["🏛 ".$dival[$i]]);
+			array_push($optionf,["🏛 ".$dival[$i]."_".$diva1[$i]]);
 
 		}
 				$keyb = $telegram->buildKeyBoard($optionf, $onetime=false);
@@ -171,8 +171,27 @@ $option=[];
 			 //$this->create_keyboard($telegram,$chat_id);
 
 */
-	}elseif(strpos($text,'🏛') !== false){
+	}elseif(strpos($text,'🏛') !== false || strpos($text,'/') !== false){
+		function extractString($string, $start, $end) {
+				$string = " ".$string;
+				$ini = strpos($string, $start);
+				if ($ini == 0) return "";
+				$ini += strlen($start);
+				$len = strpos($string, $end, $ini) - $ini;
+				return substr($string, $ini, $len);
+		}
+
+if (strpos($text,'/') !== false){
+	$text=str_replace("/","",$text);
+
+}else {
+	$text=extractString($text,"🏛 ","_");
+
+}
+
+
 		$text=str_replace("🏛 ","",$text);
+
 		$text=str_replace("🏛","",$text);
 	//	$text=str_replace("/","",$text);
 	//	$text=str_replace("$$",")",$text);
@@ -339,7 +358,7 @@ if ($count > 50){
 		if ($diva13[$i]!=NULL)$alert.= "\nApertura: ".$diva13[$i];
 		if ($diva8[$i]!=NULL) $alert.= "\nChiusura settimanale: ".$diva8[$i];
 
-
+/*
 		if ($dival[$i]!=NULL) {
 
 			$longUrl = "http://www.beniculturali.it/mibac/opencms/MiBAC/sito-MiBAC/MenuPrincipale/LuoghiDellaCultura/Ricerca/index.html?action=show&idluogo=".$dival[$i];
@@ -371,7 +390,7 @@ if ($count > 50){
 	//		$content = array('chat_id' => $chat_id, 'text' => $diva12[$i]);
 	//		$telegram->sendMessage($content);
 		}
-
+*/
 		if ($diva12[$i]!=NULL) {
 
 			$longUrl = $diva12[$i];
@@ -586,7 +605,7 @@ function location_manager($telegram,$user_id,$chat_id,$location)
 				for ($i=0;$i<$count;$i++){
 				$alert.="\n\n";
 				$alert.= $diva1[$i]."\n";
-				$alert .="🏛 ".$dival[$i]."\n";
+				$alert.= "🏛 /".$dival[$i]."\n";
 				$option[$i]=$dival[$i];
 			//	$alert .="Clicca per dettagli: /".$diva1[$i]."\n";
 				if ($diva9[$i]!=NULL){
