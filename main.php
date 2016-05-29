@@ -39,11 +39,14 @@ function start($telegram,$update)
 {
 	date_default_timezone_set('Europe/Rome');
 	$today = date("Y-m-d H:i:s");
-	if (strpos($text,'@MuseiMibactBot') !== false) $text=str_replace("@MuseiMibactBot ","",$text);
+	if (strpos($text,'@MuseiMibactBot') !== false){
+		$text=str_replace("@MuseiMibactBot ","",$text);
+		$text=str_replace("@MuseiMibactBot","",$text);
+	}
 
 	if ($text == "/start" || $text == "Info") {
 		$reply = "Benvenuto. Per ricercare un Museo, clicca sulla graffetta (📎) e poi 'posizione' oppure digita il nome del Comune. Verrà interrogato il DataBase Unico del Mibact utilizzabile con licenza CC-BY e verranno elencati fino a max 50 musei. In qualsiasi momento scrivendo /start ti ripeterò questo messaggio di benvenuto.\nQuesto bot, non ufficiale, è stato realizzato da @piersoft e il codice sorgente per libero riuso si trova su https://github.com/piersoft/MuseiMibactBot. La propria posizione viene ricercata grazie al geocoder di openStreetMap con Lic. odbl.";
-$reply .="\nWelcome. To search for a Museum, click on the paper clip (📎) and then 'position' or type the name of the municipality. It will be questioned DataBase Unique Mibact used with the CC-BY license, and will be listed up to max 50 museums. At any time by writing / start you repeat this welcome message. This bot, unofficially, has been realized by @piersoft and the source code for free reuse is on https://github.com/piersoft/MuseiMibactBot. Its position is searched through the geocoder OpenStreetMap with Lic. ODbL.";
+		$reply .="\nWelcome. To search for a Museum, click on the paper clip (📎) and then 'position' or type the name of the municipality. It will be questioned DataBase Unique Mibact used with the CC-BY license, and will be listed up to max 50 museums. At any time by writing / start you repeat this welcome message. This bot, unofficially, has been realized by @piersoft and the source code for free reuse is on https://github.com/piersoft/MuseiMibactBot. Its position is searched through the geocoder OpenStreetMap with Lic. ODbL.";
 		$content = array('chat_id' => $chat_id, 'text' => $reply,'disable_web_page_preview'=>true);
 		$telegram->sendMessage($content);
 		$log=$today. ";new chat started;" .$chat_id. "\n";
@@ -183,10 +186,8 @@ $option=[];
 
 if (strpos($text,'/') !== false){
 	$text=str_replace("/","",$text);
-
 }else {
 	$text=extractString($text,"🏛 ","_");
-
 }
 
 
@@ -500,7 +501,7 @@ if ($count > 50){
 function create_keyboard($telegram, $chat_id)
  {
 	 $forcehide=$telegram->buildKeyBoardHide(true);
-	 $content = array('chat_id' => $chat_id, 'text' => "Digita un Comune oppure invia la tua posizione tramite la graffetta (📎) / Send your position clicking 📎 or digit Town", 'reply_markup' =>$forcehide);
+	 $content = array('chat_id' => $chat_id, 'text' => "- Digita un Comune oppure invia la tua posizione tramite la graffetta (📎) \n- Send your position clicking 📎 or digit Town \n- /start x Info&Credits", 'reply_markup' =>$forcehide);
 	 $telegram->sendMessage($content);
 
  }
