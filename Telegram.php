@@ -5,15 +5,44 @@
  *
  */
 
-include('settings_t.php');
-
+include('settings.php');
 
 class Telegram {
 	private $bot_id = TELEGRAM_BOT;
 	private $data = array();
 	private $updates = array();
 	public $inited = false;
-public $link = "";
+
+
+	public function KeyboardButton($text, $request_location = null, $request_contact = null)
+	{
+		$params = compact('text', 'request_location', 'request_contact');
+		return $params;
+	}
+	public function InputTextMessageContent($message_text, $parse_mode = null, $disable_web_page_preview = false)
+	{
+		$params = compact('message_text', 'parse_mode', 'disable_web_page_preview');
+		return $params;
+	}
+
+	public function InlineQueryResultArticle($id, $title, $input_message_content,$thumb_url = "", $reply_markup,$url = "", $hide_url = false, $description = "", $thumb_width , $thumb_height)
+	{
+	    $type = 'article';
+	    $params = compact('type', 'id', 'title', 'input_message_content', 'thumb_url','reply_markup','url', 'hide_url', 'description','thumb_width','thumb_height');
+	    return $params;
+	}
+
+	public function InlineQueryResultLocation($id, $latitude,$longitude,$title )
+	{
+	    $type = 'location';
+	    $params = compact('type', 'id', 'latitude','longitude','title');
+	    return $params;
+	}
+
+	public function answerInlineQuery(array $content) {
+			return $this->endpoint("answerInlineQuery",$content);
+	}
+
  public function __construct($bot_id) {
         $this->bot_id = $bot_id;
         $this->data = $this->getData();
@@ -137,8 +166,6 @@ public $link = "";
 		if ($type == 'photo' || $type == "audio" || $type == "video" || $type == "document") {
 			$mimetype = mime_content_type($content);
 			$content = new CurlFile($content, $mimetype);
-				$link = $this->data["message"]["photo"]["file_path"];
-
 		} elseif ($type == "message") {
 			$type = 'text';
 		}
@@ -175,6 +202,62 @@ public $link = "";
         $encodedMarkup = json_encode($replyMarkup, true);
         return $encodedMarkup;
     }
+		/// Create a KeyboardButton
+			/** This object represents one button of an inline keyboard. You must use exactly one of the optional fields.
+			 * \param $text String; Array of button rows, each represented by an Array of Strings
+			 * \param $request_contact Boolean Optional. If True, the user's phone number will be sent as a contact when the button is pressed. Available in private chats only
+			 * \param $request_location Boolean Optional. If True, the user's current location will be sent when the button is pressed. Available in private chats only
+			 * \return the requested button as Array
+			 */
+			public function buildKeyboardButton($text, $request_contact = false, $request_location = false) {
+					$replyMarkup = array(
+							'text' => $text,
+							'request_contact' => $request_contact,
+							'request_location' => $request_location
+					);
+					if ($url != "") {
+							$replyMarkup['url'] = $url;
+					} else if ($callback_data != "") {
+							$replyMarkup['callback_data'] = $callback_data;
+					} else if ($switch_inline_query != "") {
+							$replyMarkup['switch_inline_query'] = $switch_inline_query;
+					}
+					return $replyMarkup;
+			}
+
+			/// Set an InlineKeyBoard
+		 /** This object represents an inline keyboard that appears right next to the message it belongs to.
+			* \param $options Array of Array of InlineKeyboardButton; Array of button rows, each represented by an Array of InlineKeyboardButton
+			* \return the requested keyboard as Json
+			*/
+		 public function buildInlineKeyBoard(array $options) {
+				 $replyMarkup = array(
+						 'inline_keyboard' => $options,
+				 );
+				 $encodedMarkup = json_encode($replyMarkup, true);
+				 return $encodedMarkup;
+		 }
+		 /// Create an InlineKeyboardButton
+		 /** This object represents one button of an inline keyboard. You must use exactly one of the optional fields.
+			* \param $text String; Array of button rows, each represented by an Array of Strings
+			* \param $url String Optional. HTTP url to be opened when button is pressed
+			* \param $callback_data String Optional. Data to be sent in a callback query to the bot when button is pressed
+			* \param $switch_inline_query String Optional. If set, pressing the button will prompt the user to select one of their chats, open that chat and insert the bot‘s username and the specified inline query in the input field. Can be empty, in which case just the bot’s username will be inserted.
+			* \return the requested button as Array
+			*/
+		 public function buildInlineKeyboardButton($text, $url = "", $callback_data = "", $switch_inline_query = "") {
+				 $replyMarkup = array(
+						 'text' => $text
+				 );
+				 if ($url != "") {
+						 $replyMarkup['url'] = $url;
+				 } else if ($callback_data != "") {
+						 $replyMarkup['callback_data'] = $callback_data;
+				 } else if ($switch_inline_query != "") {
+						 $replyMarkup['switch_inline_query'] = $switch_inline_query;
+				 }
+				 return $replyMarkup;
+		 }
 
 	 public function buildKeyBoardHide($selective = true) {
         $replyMarkup = array(
@@ -220,6 +303,13 @@ public $link = "";
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         $result = curl_exec($ch);
         curl_close($ch);
+/*
+				$myFile = "db/logarray.txt";
+				$updateArray = print_r($result,TRUE);
+				$fh = fopen($myFile, 'a') or die("can't open file");
+				fwrite($fh, $updateArray."\n");
+				fclose($fh);
+			*/
         return $result;
     }
 }
